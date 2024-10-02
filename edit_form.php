@@ -14,25 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
+/**
+ * Block editing form.
+ * @package block_dedication
+ * @copyright 2022 University of Canterbury
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class block_dedication_edit_form extends block_edit_form {
 
+    /**
+     * Custom settings for block.
+     *
+     * @param mform $mform
+     * @return void
+     */
     protected function specific_definition($mform) {
-        require_once('dedication_lib.php');
 
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
 
-        $mform->addElement('selectyesno', 'config_show_dedication', get_string('show_dedication', 'block_dedication'));
-        $mform->addHelpButton('config_show_dedication', 'show_dedication', 'block_dedication');
-        $mform->setDefault('config_text', 0);
+        $mform->addElement('selectyesno', 'config_show_dedication', get_string('showestimatedtime', 'block_dedication'));
+        $mform->addHelpButton('config_show_dedication', 'showestimatedtime', 'block_dedication');
 
-        $limitopts = array();
-        for ($i = 1; $i <= 150; $i++) {
-            $limitopts[$i * 60] = $i;
-        }
-        $mform->addElement('select', 'config_limit', get_string('limit', 'block_dedication'), $limitopts);
-        $mform->addHelpButton('config_limit', 'limit', 'block_dedication');
-        $mform->setDefault('config_limit', BLOCK_DEDICATION_DEFAULT_SESSION_LIMIT);
     }
 }

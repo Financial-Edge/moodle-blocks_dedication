@@ -14,26 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-// Basic plugin strings.
-$string['pluginname'] = 'Course dedication';
-$string['pagetitle'] = '{$a}: course dedication';
+/**
+ * Lang file for block_dedication
+ * @package block_dedication
+ * @copyright 2022 University of Canterbury
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-// Capabilites.
-$string['dedication:addinstance'] = 'Allow to add Course dedication block';
-$string['dedication:use'] = 'Allow to use Course dedication';
+defined('MOODLE_INTERNAL') || die();
 
-// Block content.
-$string['dedication_estimation'] = 'Your estimated dedication time is';
-$string['access_button'] = 'Dedication tool';
-$string['access_info'] = 'Only for teachers:';
 
-// Block form.
-$string['show_dedication'] = 'Show dedication time to students';
-$string['show_dedication_help'] = 'By default, dedication time can only be viewed by teachers. This setting allow students to see their dedication time in the block.';
-
-// Tool form.
-$string['form'] = 'Course dedication configuration';
-$string['form_help'] = 'Time is estimated based in the concepts of Session and Session duration applied to log entries.
+$string['admin_filter_courseid'] = 'Course name';
+$string['admin_filter_courseid_help'] = 'Filter the report by the course name';
+$string['admin_filter_form'] = 'Course dedication configuration';
+$string['admin_filter_form_help'] = 'Time is estimated based in the concepts of Session and Session duration applied to log entries.
 
 <strong>Click:</strong> Every time that a user access to a page in Moodle a log entry is stored.
 
@@ -43,34 +37,59 @@ between every pair of consecutive clicks does not overcome an established maximu
 <strong>Session duration:</strong> elapsed time between the first and the last click of the session.
 
 <strong>Dedication time:</strong> the sum of all session duration for a user.';
-$string['form_text'] = 'Select the range of dates and the maximum time between clicks of the same session.';
-$string['mintime'] = 'Start of the period';
-$string['mintime_help'] = 'Consider only log entries after this date';
-$string['maxtime'] = 'End of the period';
-$string['maxtime_help'] = 'Consider only log entries ending before this date';
-$string['limit'] = 'Limit between clicks (in minutes)';
-$string['limit_help'] = 'The limit between clicks defines if two clicks are part of the same session or not';
-$string['submit'] = 'Calculate';
 
-// Rows.
-$string['dedicationrow'] = 'Course dedication';
-$string['connectionratiorow'] = 'Connections per day';
-$string['sincerow'] = 'Since';
-$string['torow'] = 'To';
-$string['perioddiffrow'] = 'Elapsed time';
-
-// Headers.
+$string['admin_filter_form_text'] = 'Select the range of dates and the maximum time between clicks of the same session.';
+$string['admin_filter_mintime'] = 'Start of the period';
+$string['admin_filter_mintime_help'] = 'Consider only log entries after this date';
+$string['admin_filter_maxtime'] = 'End of the period';
+$string['admin_filter_maxtime_help'] = 'Consider only log entries ending before this date';
+$string['admin_filter_submit'] = 'Calculate';
+$string['collect_dedication'] = 'Collect data for block dedication';
+$string['group'] = 'Group';
+$string['groupentity'] = 'Group';
+$string['sessionduration'] = 'Session duration';
+$string['session_limit'] = 'Session limit';
+$string['session_limit_desc'] = 'Session limit for the report page filters';
+$string['entity_dedication'] = 'Dedication';
+$string['ignore_sessions_limit'] = 'Ignore session limit';
+$string['ignore_sessions_limit_desc'] = 'Removes shorter sessions, anything less than this value (in mins) will be ignored in the dedication report';
+$string['pluginname'] = 'Dedication';
+$string['privacy:metadata'] = 'The block_dedication plugin stores times users have dedicated to courses.';
+$string['privacy:metadata:block_dedication:userid'] = 'User id of the user dedication';
+$string['privacy:metadata:block_dedication:courseid'] = 'Course id for the user dedication';
+$string['privacy:metadata:block_dedication:timespent'] = 'Time spent on the course';
+$string['privacy:metadata:block_dedication:timestart'] = 'The start time of the data collected';
+$string['report_dedication'] = 'Tool Dedication Report';
+$string['report_timespent'] = 'Report Timespent';
+$string['user_dedication_datasource'] = 'User dedication';
+$string['dedication:addinstance'] = 'Allow to add dedication block';
+$string['dedication:myaddinstance'] = 'Allow to add dedication block to dashboard page';
+$string['dedication:viewreports'] = 'Allow to view dedication reports';
+$string['timespent_estimation'] = 'Your estimated time spent in course is:';
+$string['timespentreport'] = 'Full report';
 $string['period'] = 'Period since <em>{$a->mintime}</em> to <em>{$a->maxtime}</em>';
 $string['perioddiff'] = '<strong>Elapsed time:</strong>  {$a}';
-$string['totaldedication'] = '<strong>Total dedication:</strong> {$a}';
-$string['meandedication'] = '<strong>Mean dedication:</strong> {$a}';
 
-// Actions.
-// All action.
+$string['dedicationrow'] = 'Time spent in course';
+$string['connectionratiorow'] = 'Connections per day';
 $string['dedicationall'] = 'All course members dedication. Click on any name to see a detailed course dedication for it.';
-// Group action.
-$string['dedicationgroup'] = 'All group <em>{$a}</em> members dedication. Choose any member to see a detailed course dedication for it.';
-// User action.
-$string['userdedication'] = 'Detailed course dedication of <em>{$a}</em>.';
+$string['period'] = 'Period since <em>{$a->mintime}</em> to <em>{$a->maxtime}</em>';
+$string['perioddiff'] = '<strong>Elapsed time:</strong>  {$a}';
+$string['totaltimespent'] = '<strong>Total of all time spent in course:</strong> {$a}';
+$string['averagetimespent'] = '<strong>Average time spent in course:</strong> {$a}';
 $string['sessionstart'] = 'Session start';
-$string['sessionduration'] = 'Duration';
+$string['userdedication'] = 'Detailed course dedication of <em>{$a}</em>.';
+$string['timespentincourse'] = 'Time spent in course';
+$string['lastupdated'] = 'Last updated: {$a}';
+// Block form.
+$string['showestimatedtime'] = 'Show estimated time spent to users';
+$string['showestimatedtime_help'] = 'This setting allows users to see their estimated time spent in the block.';
+$string['cleanuptask'] = 'Session history cleanup task';
+$string['allloglifetime'] = 'Keep session history for';
+$string['configallloglifetime'] = 'This specifies the length of time you want to keep data about session duration. Sessions that are older than this age are automatically deleted.';
+$string['excludesessionslessthan'] = 'Excludes sessions less than {$a}';
+$string['viewsessiondurationreport'] = 'View session duration report';
+$string['sessiondurationsum'] = 'Session duration (sum)';
+$string['enrolmententity'] = 'Enrolment';
+$string['enrolmentmethod'] = 'Enrolment method';
+$string['timespenttasknotrunning'] = 'Time spent calculation task has not run yet.';

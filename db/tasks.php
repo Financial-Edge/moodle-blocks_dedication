@@ -15,18 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
- *
+ * Tasks used in plugin.
  * @package block_dedication
- * @copyright  Borja Rubio Reyes
+ * @copyright 2022 University of Canterbury
+ * @author Pramith Dayananda <pramithd@catalyst.net.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+defined('MOODLE_INTERNAL') || die;
 
-$plugin->component = 'block_dedication';
-$plugin->release = 2024072200;
-$plugin->version = 2024072200;
-$plugin->requires = 2024042200; // Requires 4.4.
-$plugin->maturity = MATURITY_STABLE;
-$plugin->supported = [404, 404];
+$tasks = [
+    [
+        'classname' => 'block_dedication\task\dedication_collector',
+        'blocking' => 0,
+        'minute' => '10',
+        'hour' => '01',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => false
+    ],
+    [
+        'classname' => 'block_dedication\task\cleanup',
+        'blocking' => 0,
+        'minute' => 'R',
+        'hour' => '01',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => false
+    ],
+];

@@ -14,25 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
+use block_dedication\lib\utils;
 /**
  * Dedication block definition.
  *
- * @package    block
- * @subpackage dedication
+ * @package    block_dedication
  * @copyright  2008 CICEI http://http://www.cicei.com
  * @author     2008 Borja Rubio Reyes
  *             2011 Aday Talavera Hierro (update to Moodle 2.x)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class block_dedication extends block_base {
 
+    /**
+     * Initialise.
+     *
+     * @return void
+     */
     public function init() {
         $this->title = get_string('pluginname', 'block_dedication');
     }
 
+    /** Block level config. */
     public function specialization() {
         // Previous block versions didn't have config settings.
         if ($this->config === null) {
@@ -40,19 +43,19 @@ class block_dedication extends block_base {
         }
         // Set always show_dedication config settings to avoid errors.
         if (!isset($this->config->show_dedication)) {
-            $this->config->show_dedication = 0;
+            $this->config->show_dedication = 1;
         }
     }
 
+    /**
+     * Output block.
+     *
+     * @return stdclass
+     */
     public function get_content() {
-        global $OUTPUT, $USER;
+        global $USER, $COURSE;
 
         if ($this->content !== null) {
-            return $this->content;
-        }
-
-        if (empty($this->instance)) {
-            $this->content = '';
             return $this->content;
         }
 
@@ -60,31 +63,57 @@ class block_dedication extends block_base {
         $this->content->text = '';
         $this->content->footer = '';
 
-        if ($this->config->show_dedication == 1) {
-            require_once('dedication_lib.php');
-            $mintime = $this->page->course->startdate;
-            $maxtime = time();
-            $dm = new block_dedication_manager($this->page->course, $mintime, $maxtime, $this->config->limit);
-            $dedicationtime = $dm->get_user_dedication($USER, true);
-            $this->content->text .= html_writer::tag('p', get_string('dedication_estimation', 'block_dedication'));
-            $this->content->text .= html_writer::tag('p', block_dedication_utils::format_dedication($dedicationtime));
+        $lastruntime = get_config('block_dedication', 'lastcalculated');
+        if (empty($lastruntime)) {
+            $this->content->text = html_writer::tag('p', get_string('timespenttasknotrunning', 'block_dedication'),
+                                                    ['class' => 'warning']);
+            return $this->content;
         }
+        $showtimespent = empty($this->config->show_dedication) ? false : true;
+        if ($showtimespent) {
+            $timespent = utils::timespent($COURSE->id, $USER->id);
+            $this->content->text .= html_writer::tag('p', get_string('timespent_estimation', 'block_dedication'));
+            $this->content->text .= html_writer::tag('p', $timespent);
 
-        if (has_capability('block/dedication:use', context_block::instance($this->instance->id))) {
-            $this->content->footer .= html_writer::tag('hr', null);
-            $this->content->footer .= html_writer::tag('p', get_string('access_info', 'block_dedication'));
-            $url = new moodle_url('/blocks/dedication/dedication.php', array(
-                'courseid' => $this->page->course->id,
-                'instanceid' => $this->instance->id,
-            ));
-            $this->content->footer .= $OUTPUT->single_button($url, get_string('access_button', 'block_dedication'), 'get');
+            $lastupdated = get_config('block_dedication', 'lastcalculated');
+            if (!empty($lastupdated)) {
+                $this->content->footer .= html_writer::span(get_string('lastupdated', 'block_dedication',
+                    userdate($lastupdated, get_string('strftimedatetimeshort', 'core_langconfig'))), 'dimmed_text');
+            }
+        }
+        if (has_capability('block/dedication:viewreports', context_course::instance($COURSE->id))) {
+            $url = new moodle_url('/blocks/dedication/index.php', ['id' => $COURSE->id]);
+            $this->content->footer .= html_writer::tag('p', html_writer::link($url,
+                                                       get_string('timespentreport', 'block_dedication')));
+        } else if ($showtimespent) {
+            $url = new moodle_url('/blocks/dedication/user.php', ['id' => $COURSE->id, 'userid' => $USER->id]);
+            $this->content->footer .= html_writer::tag('p', html_writer::link($url,
+                                                       get_string('timespentreport', 'block_dedication')));
         }
 
         return $this->content;
     }
 
+    /**
+     * Page types that can add this block.
+     *
+     * @return array
+     */
     public function applicable_formats() {
-        return array('course' => true);
+        return ['admin' => false,
+                'site-index' => true,
+                'course-view' => true,
+                'mod' => false,
+                'my' => false];
+    }
+
+    /**
+     * Controls global configurability of block.
+     *
+     * @return bool
+     */
+    public function has_config(): bool {
+        return true;
     }
 
 }

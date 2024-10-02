@@ -14,26 +14,36 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Capabilities for plugin.
+ *
+ * @package block_dedication
+ * @copyright  Borja Rubio Reyes
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'block/dedication:use' => array(
+$capabilities = [
+    'block/dedication:addinstance' => [
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
-            'teacher' => CAP_ALLOW,
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/dedication:addinstance' => array(
-        'riskbitmask' => RISK_SPAM | RISK_XSS,
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
-            'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
+        'archetypes' => ['editingteacher' => CAP_ALLOW,
+                         'manager' => CAP_ALLOW],
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
-    ),
-);
+    ],
+    'block/dedication:myaddinstance' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => ['editingteacher' => CAP_ALLOW,
+                         'manager' => CAP_ALLOW],
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ],
+    'block/dedication:viewreports' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => ['teacher' => CAP_ALLOW,
+                         'editingteacher' => CAP_ALLOW,
+                         'manager' => CAP_ALLOW]
+    ],
+];
